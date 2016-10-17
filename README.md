@@ -8,3 +8,5 @@ Contains:
   Retrofit usage with AsyncTask. 
   
   Retrofit usage with RxJava/RxAndroid.
+  
+  Espresso UI Testing
