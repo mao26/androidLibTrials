@@ -88,6 +88,7 @@ public class LogIn extends AppCompatActivity {
         switch(reqcode){
             case(1):
                 Toast.makeText(this, data.getStringExtra("pass"), Toast.LENGTH_SHORT).show();
+                uname.setText(data.getStringExtra("uname"));
         }
     }
 
