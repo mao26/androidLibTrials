@@ -13,26 +13,13 @@ public interface GithubClient {
     static class Repo {
         String name;
         //Original retrofit implementation
-//        private String login;
-//        private String blog;
-//        private int public_repos;
-//
-//        public String getLogin() {
-//            return login;
-//        }
-//
-//        public String getBlog() {
-//            return blog;
-//        }
-//
-//        public int getPublicRepos() {
-//            return public_repos;
-//        }
     }
 
     @GET("users/{user}/repos")
 //    Call<List<Repo>> listRepos(@Path("user") String user);
     // Retrofit basic implementation
+//    Call<List<Repo>> listRepos(@Path("user") String user);
+    //For ASYNC 2 with RxJava
     Observable<List<Repo>> listRepos(@Path("user") String user);
 
 }

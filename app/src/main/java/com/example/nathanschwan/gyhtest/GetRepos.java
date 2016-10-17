@@ -12,6 +12,8 @@ import retrofit2.Call;
  * Created by nathanschwan on 10/14/16.
  */
 
+//USE FOR ASYNC 1 case in LogIn.java activity.
+
 //public class GetRepos extends AsyncTask<Void, Void, List<GithubClient.Repo>> {
 //
 //    public interface asyncResult{

@@ -35,9 +35,12 @@ public class LogIn extends AppCompatActivity {
     private ArrayAdapter<String> myarray;
     @OnClick(R.id.submit)
     protected void submitClick(){
-        String enterUname = uname.getText().toString();
-        Toast.makeText(this, enterUname, Toast.LENGTH_LONG).show();
-        //usernames.add(enterUname);
+//        //SIMPLE 1
+//        String enterUname = uname.getText().toString();
+//        Toast.makeText(this, enterUname, Toast.LENGTH_LONG).show();
+//        usernames.add(enterUname);
+//        myarray.notifyDataSetChanged();
+          // ASYNC1
 //        GetRepos gettingRepos =  new GetRepos(new GetRepos.asyncResult() {
 //            @Override
 //            public void showAsyncResult(List<GithubClient.Repo> val) {
@@ -48,30 +51,32 @@ public class LogIn extends AppCompatActivity {
 //            }
 //        });
 //        gettingRepos.execute();
-//        NON RXJAVA VERSION
-        GithubClient client = ServiceGenerator.createService(GithubClient.class);
-        client.listRepos("nschwan94")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<GithubClient.Repo>>() {
-                    @Override
-                    public final void onCompleted() {
-                        Toast.makeText(getApplicationContext(), "WE DID IT", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public final void onError(Throwable e) {
-                        Log.e("GithubDemo", e.getMessage());
-                    }
-
-                    @Override
-                    public final void onNext(List<GithubClient.Repo> response) {
-                        for (GithubClient.Repo name: response){
-                            usernames.add(name.name);
-                        }
-                        myarray.notifyDataSetChanged();
-                    }
-                });
+//        NON RXJAVA VERSION above
+          // ASYNC2
+//        with RXJAVA below
+//        GithubClient client = ServiceGenerator.createService(GithubClient.class);
+//        client.listRepos("nschwan94")
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<List<GithubClient.Repo>>() {
+//                    @Override
+//                    public final void onCompleted() {
+//                        Toast.makeText(getApplicationContext(), "WE DID IT", Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public final void onError(Throwable e) {
+//                        Log.e("GithubDemo", e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public final void onNext(List<GithubClient.Repo> response) {
+//                        for (GithubClient.Repo name: response){
+//                            usernames.add(name.name);
+//                        }
+//                        myarray.notifyDataSetChanged();
+//                    }
+//                });
     }
 
     @Override

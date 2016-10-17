@@ -20,6 +20,8 @@ public class ServiceGenerator {
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
                     .baseUrl(API_BASE_URL)
+                    //call adapter added for Observable result within ASYNC 2 of LogIn.java activity
+                    //for ASYNC 1 remove addCallAdapterFactory , not needed.
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create());
 
@@ -28,6 +30,7 @@ public class ServiceGenerator {
         return retrofit.create(serviceClass);
     }
 
+      //FOR ASYNC 1 Retrofit implementation. used with GitHubClient
 //    public static void main(String... args){
 //        GithubClient client = ServiceGenerator.createService(GithubClient.class);
 //
