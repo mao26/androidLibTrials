@@ -5,6 +5,7 @@ package com.example.nathanschwan.gyhtest;
  */
 
 
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -18,6 +19,9 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.ComponentNameMatchers.hasShortClassName;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.espresso.Espresso.onData;
@@ -28,28 +32,50 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.anything;
 
+import android.content.Intent;
+import android.app.Instrumentation.ActivityResult;
+import android.app.Activity;
+
 //testing adding uname functionality to list, must uncomment SIMPLE1 in LogIn.java
+//testing SignUp intent trigger -- TRIGGER SIGNUP in LogIn.java
 
 @RunWith(AndroidJUnit4.class)
 public class LogInActivityEspressoTest {
 
+//    @Rule
+//    public ActivityTestRule<LogIn> mActivityRule =
+//            new ActivityTestRule<>(LogIn.class);
+//    @Test
+//    public void ensureTextChangesWork() {
+//        // Type text and then press the button.
+//        onView(withId(R.id.uname))
+//                .perform(typeText("HELLO"), closeSoftKeyboard());
+//
+//        onView(withId(R.id.submit)).perform(click());
+//
+//        // Check that the text was changed.
+//        onData(anything())
+//                .inAdapterView(withId(R.id.unamelist))
+//                .atPosition(0)
+//                .check(matches(withText("HELLO")));
+//    }
+
     @Rule
-    public ActivityTestRule<LogIn> mActivityRule =
-            new ActivityTestRule<>(LogIn.class);
+    public IntentsTestRule<LogIn> mIntentsRule =
+            new IntentsTestRule<>(LogIn.class);
+
     @Test
-    public void ensureTextChangesWork() {
-        // Type text and then press the button.
-        onView(withId(R.id.uname))
-                .perform(typeText("HELLO"), closeSoftKeyboard());
+    public void testSignUpIntent(){
+
+        //Testing that SignUp received an Intent.
+        Intent result = new Intent();
+        result.putExtra("uname", "uname");
+        result.putExtra("pass", "pass1");
+        ActivityResult receiveResult = new ActivityResult(Activity.RESULT_OK, result);
 
         onView(withId(R.id.submit)).perform(click());
 
-        // Check that the text was changed.
-        onData(anything())
-                .inAdapterView(withId(R.id.unamelist))
-                .atPosition(0)
-                .check(matches(withText("HELLO")));
+        intended(allOf(hasComponent(hasShortClassName(".SignUp"))));
     }
-
 
 }
