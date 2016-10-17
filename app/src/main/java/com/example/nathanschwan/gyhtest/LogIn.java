@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import android.widget.ListView;
+import android.content.Intent;
 
 //imports for RxJava
 import rx.android.schedulers.AndroidSchedulers;
@@ -77,6 +78,17 @@ public class LogIn extends AppCompatActivity {
 //                        myarray.notifyDataSetChanged();
 //                    }
 //                });
+        // TRIGGER SIGNUP
+        Intent signup = new Intent(this, SignUp.class);
+        startActivityForResult(signup, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int reqcode, int rescode, Intent data){
+        switch(reqcode){
+            case(1):
+                Toast.makeText(this, data.getStringExtra("pass"), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -84,7 +96,7 @@ public class LogIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         ButterKnife.bind(this);
-//        lambda below versus butterknife annotation OnClick
+//        lambda below versus butterknife annotation OnClick above
 //        submit.setOnClickListener(e->{
 //            String enterUname = uname.getText().toString();
 //            Toast.makeText(this, "Hello World", Toast.LENGTH_LONG).show();
