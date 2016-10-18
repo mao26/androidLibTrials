@@ -163,6 +163,7 @@ public class LogIn extends AppCompatActivity {
 //        });
         myarray = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, usernames);
         customAdapter = new repoArrayAdapter(this, 0, repos);
+        //choose between regular adapter or custom adapter.
         unamelist.setAdapter(customAdapter);
     }
 }

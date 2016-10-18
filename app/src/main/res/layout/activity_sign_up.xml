@@ -30,4 +30,17 @@
         android:text="@string/Submit"
         android:id="@+id/submit"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Users"
+        android:id="@+id/showusers"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/usersList">
+
+    </ListView>
+
 </LinearLayout>
