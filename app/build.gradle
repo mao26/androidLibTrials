@@ -60,8 +60,9 @@ dependencies {
     compile('com.amazonaws:aws-android-sdk-core:2.2.18')
 
     // add the DynamoDB SDK and DynamoDB Object Mapper dependency
-    compile('com.amazonaws:aws-android-sdk-ddb:2.2.18')
-    compile('com.amazonaws:aws-android-sdk-ddb-mapper:2.2.18')
+    compile('com.amazonaws:aws-android-sdk-ddb:2.3.+')
+    compile('com.amazonaws:aws-android-sdk-ddb-mapper:2.3.+')
+
 
     //multidex
     compile 'com.android.support:multidex:1.0.1'
