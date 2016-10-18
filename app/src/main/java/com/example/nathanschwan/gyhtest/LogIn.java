@@ -1,10 +1,16 @@
 package com.example.nathanschwan.gyhtest;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.EditText;
 import butterknife.BindView;
@@ -33,7 +39,55 @@ public class LogIn extends AppCompatActivity {
     @BindView(R.id.submit) Button submit;
     @BindView(R.id.unamelist) ListView unamelist;
     private List<String> usernames = new ArrayList<String>();
+    //for Custom Adapter
+    private ArrayList<GithubClient.Repo> repos = new ArrayList<GithubClient.Repo>();
     private ArrayAdapter<String> myarray;
+    //custom adapter
+    private ArrayAdapter<GithubClient.Repo> customAdapter;
+
+
+    //custom adapter implementation
+    class repoArrayAdapter extends ArrayAdapter<GithubClient.Repo>{
+        private Context context;
+        private List<GithubClient.Repo> repoList;
+
+        //constructor
+        public repoArrayAdapter(Context context, int resource, ArrayList<GithubClient.Repo> objects){
+            super(context, resource, objects);
+
+            this.context = context;
+            this.repoList = objects;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent){
+            GithubClient.Repo thisrepo = repoList.get(position);
+
+            //get inflator
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.gitrepo, null);
+
+            //set onclick listener for rows
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TextView name = (TextView) v.findViewById(R.id.name);
+                    String name1 = name.getText().toString();
+                    Toast.makeText(context, name1, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+            TextView name = (TextView) view.findViewById(R.id.name);
+            TextView id = (TextView) view.findViewById(R.id.id);
+
+            name.setText(thisrepo.getName());
+            id.setText(Integer.toString(thisrepo.getId()));
+
+            return view;
+
+        }
+    }
+
     @OnClick(R.id.submit)
     protected void submitClick(){
 //        //SIMPLE 1
@@ -54,7 +108,7 @@ public class LogIn extends AppCompatActivity {
 //        gettingRepos.execute();
 //        NON RXJAVA VERSION above
           // ASYNC2
-//        with RXJAVA below
+        //with RXJAVA below
 //        GithubClient client = ServiceGenerator.createService(GithubClient.class);
 //        client.listRepos("nschwan94")
 //                .subscribeOn(Schedulers.newThread())
@@ -72,15 +126,18 @@ public class LogIn extends AppCompatActivity {
 //
 //                    @Override
 //                    public final void onNext(List<GithubClient.Repo> response) {
-//                        for (GithubClient.Repo name: response){
+//                        for (GithubClient.Repo name: response) {
 //                            usernames.add(name.name);
+//                            repos.add(name);
 //                        }
 //                        myarray.notifyDataSetChanged();
+//                        customAdapter.notifyDataSetChanged();
 //                    }
 //                });
         // TRIGGER SIGNUP
         Intent signup = new Intent(this, SignUp.class);
-        startActivityForResult(signup, 1);
+//        startActivityForResult(signup, 1);
+        startActivity(signup);
     }
 
     @Override
@@ -105,6 +162,7 @@ public class LogIn extends AppCompatActivity {
 //            myarray.notifyDataSetChanged();
 //        });
         myarray = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, usernames);
-        unamelist.setAdapter(myarray);
+        customAdapter = new repoArrayAdapter(this, 0, repos);
+        unamelist.setAdapter(customAdapter);
     }
 }
