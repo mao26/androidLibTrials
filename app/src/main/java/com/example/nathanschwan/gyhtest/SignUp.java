@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Button;
 import android.widget.Toast;
 import android.content.Intent;
 
@@ -15,34 +14,20 @@ import butterknife.OnClick;
 
 
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.mobile.AWSMobileClient;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
-import com.amazonaws.models.nosql.FitnessLevelsDO;
 import com.amazonaws.models.nosql.UsersTESTDO;
 
-import com.amazonaws.models.nosql.UserDO;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
 
 // import the CognitoCredentialsProvider object from the auth package
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.regions.Regions;
-
-
 
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import android.util.Log;
-
-import java.util.List;
-import java.util.Map;
 
 import rx.Subscriber;
 
@@ -53,7 +38,7 @@ import rx.Subscriber;
 public class SignUp extends AppCompatActivity {
 
 
-    private final static String LOG_TAG = Application.class.getSimpleName();
+    private final static String LOG_TAG = MyApplication.class.getSimpleName();
 
     @BindView(R.id.uname)
     EditText uname;
@@ -61,6 +46,10 @@ public class SignUp extends AppCompatActivity {
     EditText pass;
     @BindView(R.id.passconfirm)
     EditText passconfirm;
+
+    private CognitoCachingCredentialsProvider credentialsProvider;
+    private AmazonDynamoDBClient ddbClient;
+    private DynamoDBMapper mapper;
 
 
     @OnClick(R.id.showusers)
@@ -149,27 +138,20 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
+        credentialsProvider = ((MyApplication) this.getApplication()).getProvider();
+
+        ddbClient = new AmazonDynamoDBClient(credentialsProvider);
+        mapper = new DynamoDBMapper(ddbClient);
+
     }
 
     public boolean insertData(String name, String password) {
-        // Initialize the Amazon Cognito credentials provider
-//        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-//                this.getApplicationContext(),
-//                "us-east-1:ce4c9743-c8b5-440e-bf65-782a6f021a66", // Identity Pool ID
-//                Regions.US_EAST_1 // Region
-//        );
-//
-//
-//        AmazonDynamoDBClient ddbClient = new AmazonDynamoDBClient();
-//        DynamoDBMapper mapper = new DynamoDBMapper(ddbClient);
-
-        final DynamoDBMapper dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 
         final UsersTESTDO note = new UsersTESTDO(); // Initialize the Notes Object
 
         note.setName(name);
         note.setPassword(password);
-        note.setUserId("NOTUUID1");
+        note.setUserId("NOTUUID102016");
 //
 //        note.setPushup((double) 20);
 //        note.setSitups((double) 25);
@@ -182,7 +164,7 @@ public class SignUp extends AppCompatActivity {
 
 
         try {
-            dynamoDBMapper.save(note);
+            mapper.save(note);
         } catch (final AmazonClientException ex) {
             Log.e(LOG_TAG, "Failed saving item : " + ex.getMessage(), ex);
             lastException = ex;
@@ -194,18 +176,6 @@ public class SignUp extends AppCompatActivity {
     }
 
     protected boolean showData(){
-        // Initialize the Amazon Cognito credentials provider
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                this.getApplicationContext(),
-                "us-east-1:ce4c9743-c8b5-440e-bf65-782a6f021a66", // Identity Pool ID
-                Regions.US_EAST_1 // Region
-        );
-
-
-        AmazonDynamoDBClient ddbClient = new AmazonDynamoDBClient(credentialsProvider);
-        DynamoDBMapper mapper = new DynamoDBMapper(ddbClient);
-
-
 
         Runnable runnable = new Runnable() {
             public void run() {

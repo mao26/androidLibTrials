@@ -67,5 +67,9 @@ dependencies {
     //multidex
     compile 'com.android.support:multidex:1.0.1'
 
+    //signin
+    compile 'com.google.android.gms:play-services-auth:9.2.1'
+
+
 
 }
