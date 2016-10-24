@@ -4,11 +4,13 @@ package com.example.nathanschwan.gyhtest;
 import android.app.Application;
 import android.util.Log;
 
-import android.support.multidex.MultiDexApplication;
+//import android.support.multidex.MultiDexApplication;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.regions.Regions;
+
+import com.amazonaws.mobileconnectors.apigateway.ApiClientFactory;
 
 /**
  * Created by nathanschwan on 10/18/16.
@@ -20,6 +22,8 @@ public class MyApplication extends Application {
 
     //amazon signin cognito services.
     public CognitoCachingCredentialsProvider credentialsProvider;
+    public ApiClientFactory factory;
+
 
 
     @Override
@@ -39,6 +43,8 @@ public class MyApplication extends Application {
                 "us-east-1:ce4c9743-c8b5-440e-bf65-782a6f021a66", // Identity Pool ID
                 Regions.US_EAST_1 // Region
         );
+        factory = new ApiClientFactory()
+                .credentialsProvider(credentialsProvider);
 
         // ... Put any application-specific initialization logic here ...
     }
@@ -46,5 +52,9 @@ public class MyApplication extends Application {
     public CognitoCachingCredentialsProvider getProvider(){
         return credentialsProvider;
     }
+
+    public ApiClientFactory getFactory() {return factory;}
+
+
 
 }
